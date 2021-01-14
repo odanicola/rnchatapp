@@ -16,25 +16,20 @@ export default function AddRoomScreen({ navigation }) {
         if (roomName.length > 0) {
         firestore()
             .collection('THREADS')
-            .add({
+            .doc('00001')
+            .set({
                 name: roomName,
                 latestMessage: {
-                    text: `You have joined the room ${roomName}.`,
+                    text: `You have joined the ss room ${roomName}.`,
                     createdAt: new Date().getTime()
                 }
             })
-            .then(docRef => {
-                console.log(docRef)
-                docRef.collection('MESSAGES').add({
-                    text: `You have joined the room ${roomName}.`,
-                    createdAt: new Date().getTime(),
-                    system: true
-                });
-                navigation.navigate('Home');
+            .then(() => {
+                console.log('User added!');
             });
         }
     }
-
+    
     return (
         <View style={styles.rootContainer}>
         <View style={styles.closeButtonContainer}>

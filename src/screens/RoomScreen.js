@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat';
 import { IconButton } from 'react-native-paper';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 
 export default function RoomScreen() {
   const [messages, setMessages] = useState([
@@ -27,7 +28,21 @@ export default function RoomScreen() {
     }
   ]);
 
-  useEffect(() => {},[])
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('THREADS')
+      .doc('00001')
+      .onSnapshot(documentSnapshot => {
+        console.log('User data: ', documentSnapshot.data());
+      });
+
+      return () => subscriber();
+  },['00001'])
+
+  async function getCollection () {
+    const usersCollection = await firestore().collection('THREADS').get();
+    console.log(usersCollection)
+  }
 
   // helper method that is sends a message
   function handleSend(newMessage = []) {
